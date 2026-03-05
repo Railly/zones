@@ -36,92 +36,85 @@ export function GroupedZoneRow({
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
 			style={ambientGradient ? { backgroundImage: ambientGradient } : undefined}
-			className={`group flex items-center justify-between px-3 sm:px-5 md:px-8 border-b border-[var(--color-border)] transition-colors flex-1 min-h-0 ${
+			className={`group flex items-center justify-between px-3 sm:px-5 md:px-8 py-1 border-b border-[var(--color-border)] transition-colors flex-1 min-h-0 overflow-hidden ${
 				isHomeGroup
 					? "border-l-2 border-l-[var(--color-foreground)] bg-[var(--color-foreground)]/[0.02]"
 					: "border-l-2 border-l-transparent hover:bg-[var(--color-foreground)]/[0.02]"
 			}`}
 		>
-			<div className="flex items-center gap-2 sm:gap-5 min-w-0 flex-1">
-				<div className="flex items-center gap-1 sm:gap-2 shrink-0">
-					{group.zones.map((zone) => (
-						<span
-							key={zone.id}
-							className={`fi fi-${zone.countryCode} rounded`}
-							style={{
-								fontSize:
-									group.zones.length > 2
-										? "clamp(1.2rem, 3vw, 3rem)"
-										: "clamp(1.5rem, 5vw, 4.5rem)",
-								lineHeight: 1,
-							}}
-						/>
-					))}
+			<div className="flex flex-col justify-center gap-0.5 min-w-0 flex-1">
+				<div
+					className="font-[family-name:var(--font-geist-pixel-square)] font-bold text-[var(--color-foreground)] tracking-wider uppercase leading-none truncate"
+					style={{
+						fontSize: "clamp(14px, 3.5vw, 48px)",
+					}}
+				>
+					{group.zones.map((z) => z.label).join(", ")}
 				</div>
-				<div className="min-w-0 flex flex-col gap-0.5">
-					<div
-						className="font-[family-name:var(--font-geist-pixel-square)] font-bold text-[var(--color-foreground)] tracking-wider uppercase leading-none"
-						style={{
-							fontSize: "clamp(14px, 3.5vw, 48px)",
-						}}
-					>
-						{group.zones.map((z) => z.label).join(", ")}
+				<div className="flex items-center gap-1.5 sm:gap-2">
+					<div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+						{group.zones.map((zone) => (
+							<span
+								key={zone.id}
+								className={`fi fi-${zone.countryCode} rounded`}
+								style={{
+									fontSize:
+										group.zones.length > 2
+											? "clamp(1.8rem, 4vw, 4.5rem)"
+											: "clamp(2.2rem, 6vw, 6.5rem)",
+									lineHeight: 1,
+								}}
+							/>
+						))}
 					</div>
-					<div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+					{isHomeGroup && (
 						<span
-							className="font-[family-name:var(--font-geist-pixel-square)] text-[var(--color-muted-foreground)] uppercase tracking-widest"
+							className="font-mono uppercase tracking-widest text-[var(--color-muted-foreground)] border border-[var(--color-border)] px-1 py-0.5 shrink-0"
+							style={{ fontSize: "clamp(7px, 1vw, 10px)" }}
+						>
+							home
+						</span>
+					)}
+					{deltaStr && (
+						<m.span
+							key={deltaStr}
+							initial={{ scale: 0.9, opacity: 0 }}
+							animate={{ scale: 1, opacity: 1 }}
+							className={`font-[family-name:var(--font-geist-pixel-square)] font-bold tracking-wider shrink-0 ${
+								group.offset > 0
+									? "text-[var(--color-delta-positive)]"
+									: "text-[var(--color-delta-negative)]"
+							}`}
 							style={{
-								fontSize: "clamp(8px, 1.5vw, 14px)",
+								fontSize: "clamp(13px, 3vw, 28px)",
 							}}
 						>
-							{group.zones.map((z) => z.sublabel).join(" / ")}
+							{deltaStr}
+						</m.span>
+					)}
+					{group.dayDelta !== 0 && (
+						<span
+							className={`font-[family-name:var(--font-geist-pixel-square)] font-bold shrink-0 ${
+								group.dayDelta > 0
+									? "text-[var(--color-delta-positive)]"
+									: "text-[var(--color-delta-negative)]"
+							}`}
+							style={{
+								fontSize: "clamp(11px, 2.5vw, 22px)",
+							}}
+						>
+							{group.dayDelta > 0 ? "+1d" : "-1d"}
 						</span>
-						{isHomeGroup && (
-							<span className="font-mono text-[8px] sm:text-[10px] uppercase tracking-widest text-[var(--color-muted-foreground)] border border-[var(--color-border)] px-1 sm:px-1.5 py-0.5">
-								home
-							</span>
-						)}
-						{deltaStr && (
-							<m.span
-								key={deltaStr}
-								initial={{ scale: 0.9, opacity: 0 }}
-								animate={{ scale: 1, opacity: 1 }}
-								className={`font-[family-name:var(--font-geist-pixel-square)] font-bold tracking-wider ${
-									group.offset > 0
-										? "text-[var(--color-delta-positive)]"
-										: "text-[var(--color-delta-negative)]"
-								}`}
-								style={{
-									fontSize: "clamp(12px, 2.5vw, 24px)",
-								}}
-							>
-								{deltaStr}
-							</m.span>
-						)}
-						{group.dayDelta !== 0 && (
-							<span
-								className={`font-[family-name:var(--font-geist-pixel-square)] font-bold ${
-									group.dayDelta > 0
-										? "text-[var(--color-delta-positive)]"
-										: "text-[var(--color-delta-negative)]"
-								}`}
-								style={{
-									fontSize: "clamp(10px, 2vw, 18px)",
-								}}
-							>
-								{group.dayDelta > 0 ? "+1d" : "-1d"}
-							</span>
-						)}
-					</div>
+					)}
 				</div>
 			</div>
-			<div className="flex items-baseline gap-1 sm:gap-2 text-right shrink-0">
+			<div className="flex items-baseline gap-1 sm:gap-2 shrink-0">
 				<div
 					className={`font-[family-name:var(--font-geist-pixel-square)] font-bold tabular-nums tracking-wider transition-opacity ${
 						isScrubbing && !isHomeGroup ? "opacity-80" : ""
 					}`}
 					style={{
-						fontSize: "clamp(24px, 7vw, 100px)",
+						fontSize: "clamp(32px, 10vw, 130px)",
 						lineHeight: 1,
 					}}
 				>
@@ -131,7 +124,7 @@ export function GroupedZoneRow({
 					<span
 						className="font-[family-name:var(--font-geist-pixel-square)] font-bold text-[var(--color-muted-foreground)] tracking-wider"
 						style={{
-							fontSize: "clamp(8px, 1.8vw, 28px)",
+							fontSize: "clamp(11px, 2.5vw, 32px)",
 							lineHeight: 1,
 						}}
 					>
