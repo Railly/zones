@@ -124,7 +124,7 @@ export function GroupedZoneRow({
 						isScrubbing && !isHomeGroup ? "opacity-80" : ""
 					}`}
 					style={{
-						fontSize: "clamp(32px, 10vw, 130px)",
+						fontSize: "clamp(32px, 8vw, 100px)",
 						lineHeight: 1,
 					}}
 				>
@@ -134,7 +134,7 @@ export function GroupedZoneRow({
 					<span
 						className="font-[family-name:var(--font-geist-pixel-square)] font-bold text-[var(--color-muted-foreground)] tracking-wider"
 						style={{
-							fontSize: "clamp(11px, 2.5vw, 32px)",
+							fontSize: "clamp(11px, 2vw, 24px)",
 							lineHeight: 1,
 						}}
 					>
