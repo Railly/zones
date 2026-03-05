@@ -58,7 +58,7 @@ export default function Home() {
 	);
 
 	return (
-		<div className="flex flex-col h-screen">
+		<div className="flex flex-col" style={{ height: "100dvh" }}>
 			<ViewSwitcher
 				current={viewMode}
 				onChange={setViewMode}
