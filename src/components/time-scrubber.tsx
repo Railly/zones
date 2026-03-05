@@ -11,7 +11,7 @@ const MAGNET_RADIUS = 4;
 const BASE_HEIGHT_MAJOR = 24;
 const BASE_HEIGHT_MID = 16;
 const BASE_HEIGHT_MINOR = 10;
-const MAX_HEIGHT = 36;
+const MAX_HEIGHT = 44;
 
 function useScrubSound() {
 	const audioCtxRef = useRef<AudioContext | null>(null);
@@ -185,7 +185,22 @@ export function TimeScrubber({
 					playTick();
 				}}
 			>
-				<div className="absolute inset-0 flex items-end justify-between px-0">
+				<motion.div
+					className="absolute top-0 pointer-events-none z-0"
+					style={{
+						left: thumbLeft,
+						x: "-50%",
+					}}
+					animate={{
+						height: isHovering ? "120%" : "100%",
+						width: isHovering ? 5 : 3,
+					}}
+					transition={{ type: "spring", stiffness: 500, damping: 30 }}
+				>
+					<div className="w-full h-full bg-[var(--color-foreground)] rounded-full shadow-[0_0_8px_var(--color-foreground)/30]" />
+				</motion.div>
+
+				<div className="absolute inset-0 flex items-end justify-between px-0 z-10">
 					{Array.from({ length: TOTAL_LINES }).map((_, i) => {
 						const isMajor = i % 12 === 0;
 						const isMid = i % 6 === 0 && !isMajor;
@@ -221,21 +236,6 @@ export function TimeScrubber({
 						);
 					})}
 				</div>
-
-				<motion.div
-					className="absolute top-0 pointer-events-none"
-					style={{
-						left: thumbLeft,
-						x: "-50%",
-					}}
-					animate={{
-						height: isHovering ? "120%" : "100%",
-						width: isHovering ? 5 : 3,
-					}}
-					transition={{ type: "spring", stiffness: 500, damping: 30 }}
-				>
-					<div className="w-full h-full bg-[var(--color-foreground)] rounded-full shadow-[0_0_8px_var(--color-foreground)/30]" />
-				</motion.div>
 
 				<div
 					className="absolute bottom-0 pointer-events-none"
