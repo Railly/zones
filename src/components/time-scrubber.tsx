@@ -11,7 +11,7 @@ const MAGNET_RADIUS = 4;
 const BASE_HEIGHT_MAJOR = 24;
 const BASE_HEIGHT_MID = 16;
 const BASE_HEIGHT_MINOR = 10;
-const MAGNET_BOOST = 18;
+const MAX_HEIGHT = 36;
 
 function useScrubSound() {
 	const audioCtxRef = useRef<AudioContext | null>(null);
@@ -57,6 +57,7 @@ export function TimeScrubber({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const isDragging = useRef(false);
 	const [hoverLineIndex, setHoverLineIndex] = useState<number | null>(null);
+	const [isHovering, setIsHovering] = useState(false);
 
 	const offsetHours = scrubberMinutes / 60;
 	const sign = offsetHours >= 0 ? "+" : "";
@@ -101,11 +102,13 @@ export function TimeScrubber({
 		(e.target as HTMLElement).setPointerCapture(e.pointerId);
 		setScrubberMinutes(getMinutesFromPointer(e.clientX));
 		setHoverLineIndex(getLineIndexFromPointer(e.clientX));
+		setIsHovering(true);
 	}
 
 	function handlePointerMove(e: React.PointerEvent) {
 		const idx = getLineIndexFromPointer(e.clientX);
 		setHoverLineIndex(idx);
+		setIsHovering(true);
 		if (!isDragging.current) return;
 		setScrubberMinutes(getMinutesFromPointer(e.clientX));
 	}
@@ -117,6 +120,7 @@ export function TimeScrubber({
 	function handlePointerLeave() {
 		if (!isDragging.current) {
 			setHoverLineIndex(null);
+			setIsHovering(false);
 		}
 	}
 
@@ -196,7 +200,7 @@ export function TimeScrubber({
 							}
 						}
 
-						const height = baseHeight + magnetFactor * MAGNET_BOOST;
+						const height = baseHeight + magnetFactor * (MAX_HEIGHT - baseHeight);
 						const opacity = 0.06 + magnetFactor * 0.5;
 
 						return (
@@ -219,13 +223,18 @@ export function TimeScrubber({
 				</div>
 
 				<motion.div
-					className="absolute top-0 h-full pointer-events-none"
+					className="absolute top-0 pointer-events-none"
 					style={{
 						left: thumbLeft,
 						x: "-50%",
 					}}
+					animate={{
+						height: isHovering ? "120%" : "100%",
+						width: isHovering ? 5 : 3,
+					}}
+					transition={{ type: "spring", stiffness: 500, damping: 30 }}
 				>
-					<div className="w-[3px] h-full bg-[var(--color-foreground)] shadow-[0_0_8px_var(--color-foreground)/30]" />
+					<div className="w-full h-full bg-[var(--color-foreground)] rounded-full shadow-[0_0_8px_var(--color-foreground)/30]" />
 				</motion.div>
 
 				<div
